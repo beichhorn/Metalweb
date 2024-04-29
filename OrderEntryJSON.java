@@ -6,13 +6,11 @@ package com.paragon.metalware.orderentry;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.*;
 
 import com.paragon.metalware.Globals;
 import com.paragon.metalware.PropertiesBean;
@@ -70,20 +68,7 @@ public class OrderEntryJSON extends HttpServlet {
         HttpSession ses = request.getSession(false);        
         com.paragon.metalware.CustomerBean cb = 
                 (com.paragon.metalware.CustomerBean)ses.getAttribute("customerBean");
-
-                String userID = cb.getUserID();
-
-                FileWriter geek_file; 
-                geek_file = new FileWriter("/home/BEICHHORN/FLAGS.txt", true);
-                BufferedWriter geekwrite = new BufferedWriter(geek_file);
-                geekwrite.write(userID + System.lineSeparator());
-                geekwrite.write(cb.getPSsel1() + System.lineSeparator());
-                geekwrite.write(cb.getPSsel2() + System.lineSeparator());
-                geekwrite.write(cb.getPSsel3() + System.lineSeparator());
-                geekwrite.write(cb.getPSsel4() + System.lineSeparator());
-                geekwrite.write(cb.getPSsel5() + System.lineSeparator());
-                geekwrite.close();
-                            
+              
         // Initial Product Selector modes Base = "2" and Admiral = "3" and Old Metalweb = "1"
         // Order_Entry3.jsp/HeadJS.jsp function.js-getOEJSON/OrderEntryJSON
         if (cb.getPSsel1()==false) {
@@ -111,30 +96,28 @@ public class OrderEntryJSON extends HttpServlet {
         String action = request.getParameter("action").trim();
 
         if (action.equals("itemsearch")) {
-
-            OrderEntryItemsBean items = new OrderEntryItemsBean(request);             
+            OrderEntryItemsBean items = new OrderEntryItemsBean(request);       
             items.setType("");
             items.setCls1(request.getParameter("cls"));
             items.setGrade(request.getParameter("grade"));            
             items.setTemper(request.getParameter("temper"));
             items.setShape(request.getParameter("shape"));
             items.setThick(request.getParameter("thick"));
-            items.setSel1(request.getParameter("sel1"));
+            items.setSel1(request.getParameter("sel1"));            
+            items.setSel2(request.getParameter("sel2"));
+            items.setSel3(request.getParameter("sel3"));
+            items.setSel4(request.getParameter("sel4"));
             // Info will only be loaded when everything else is empty
             if ((request.getParameter("cls")).isEmpty()) {
-                
                 if ((request.getParameter("partInfo")).isEmpty()) {
                     items.setDailyOfr(request.getParameter("dailyOfr"));            	
                 } else {           	
                     items.setPartInfo(request.getParameter("partInfo"));
                 }
             }
-
-            response.setContentType("application/json;charset=UTF-8"); 
+            response.setContentType("application/json;charset=UTF-8");  
             out.println(items.getProdItemsJSON());
-            
-  
-        }    
+            } 
         else if (action.equals("uomlookup")){
             OrderEntryItemsBean shapeuom = new OrderEntryItemsBean(request);
             shapeuom.setuShape(request.getParameter("shape"));
