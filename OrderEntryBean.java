@@ -1088,17 +1088,6 @@ public class OrderEntryBean extends Object implements Serializable {
             }
             rs.close();
              
-                
-              File myObj = new File("/home/BEICHHORN/JF.txt");
-              myObj.createNewFile();
-              BufferedWriter writer = new BufferedWriter(new FileWriter("/home/BEICHHORN/JF.txt", true));
-              writer.write(key01);
-              writer.newLine();
-              writer.write(sel02);
-              writer.newLine();
-              writer.write(dsc02);
-              writer.newLine();
-              writer.close();
         } catch (Exception e) {
         	js4.append("}");
             e.printStackTrace();
@@ -1568,17 +1557,6 @@ public class OrderEntryBean extends Object implements Serializable {
               } else {                                            
                 dsc02=rs.getString("DSP1").trim();                   
               }  
-
-              File myObj = new File("/home/BEICHHORN/JF.txt");
-              myObj.createNewFile();
-              BufferedWriter writer = new BufferedWriter(new FileWriter("/home/BEICHHORN/JF.txt", true));
-              writer.write(key01);
-              writer.newLine();
-              writer.write(sel02);
-              writer.newLine();
-              writer.write(dsc02);
-              writer.newLine();
-              writer.close();
 
               // 1st part           
               if (!key01W.equals(key01)) { 

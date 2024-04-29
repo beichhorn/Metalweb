@@ -72,17 +72,6 @@ public class OrderEntryJSON extends HttpServlet {
                 (com.paragon.metalware.CustomerBean)ses.getAttribute("customerBean");
 
                 String userID = cb.getUserID();
-
-                FileWriter geek_file; 
-                geek_file = new FileWriter("/home/BEICHHORN/FLAGS.txt", true);
-                BufferedWriter geekwrite = new BufferedWriter(geek_file);
-                geekwrite.write(userID + System.lineSeparator());
-                geekwrite.write(cb.getPSsel1() + System.lineSeparator());
-                geekwrite.write(cb.getPSsel2() + System.lineSeparator());
-                geekwrite.write(cb.getPSsel3() + System.lineSeparator());
-                geekwrite.write(cb.getPSsel4() + System.lineSeparator());
-                geekwrite.write(cb.getPSsel5() + System.lineSeparator());
-                geekwrite.close();
                             
         // Initial Product Selector modes Base = "2" and Admiral = "3" and Old Metalweb = "1"
         // Order_Entry3.jsp/HeadJS.jsp function.js-getOEJSON/OrderEntryJSON
