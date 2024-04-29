@@ -22,8 +22,8 @@
 
 	<%@include file="/WEB-INF/jspf/logon.jspf" %> 
   </c:when>   
-  <c:when test="${customerBean.getPSsel4()==true}"> 
-    <jsp:include page="/order_entry5.jsp"/>
+  <c:when test="${customerBean.getPSsel2()==true}"> 
+    <jsp:include page="/order_entry3.jsp"/>
   </c:when>
   <c:otherwise>
     <jsp:include page="/order_entry3.jsp"/>  

@@ -59,6 +59,9 @@
               </select> 
               <select name="temper" id="temper" data-mini="true" disabled> 
                 <option value="none">* None Selected</option>   
+              </select>   
+              <select name="shape" id="shape" data-mini="true" disabled>
+                <option value="none">* None Selected</option>
               </select> 
               <select name="thick" id="thick" data-mini="true" disabled> 
                 <option value="none">* None Selected</option>
@@ -130,7 +133,7 @@
                     </div>
                   </div>
                 </div>
-                
+  
                 <div id="shape-options" style="display:none">
                   <div class="d-flex align-items-baseline filter-container mb-2">
                     <h3 class="fw-bold me-3"><fmt:message key="PS_SHP"/></h3>
@@ -174,8 +177,8 @@
                   <div id="product-listings" class="d-flex row">
                     <c:if test="${customerBean.getLoggedIn() =='false' && customerBean.getGEEnabled()=='false'}"> 
                       <h3 class="mt-3 open-sans-font fw-bold">Please Sign In or Contact our Customer Service Department.</h3>
-                    </c:if>
-                    <c:if test="${customerBean.getLoggedIn() =='true' || customerBean.getGEEnabled()=='true'}">   
+                    </c:if> 
+                    <c:if test="${customerBean.getLoggedIn() =='true' || customerBean.getGEEnabled()=='true'}"> 
                       <h3 class="mt-3 open-sans-font fw-bold" id="locate-product-title">Use the Product Selector to locate a product.</h3>
                     </c:if>
                   </div>
