@@ -10,7 +10,6 @@ import com.paragon.metalware.Globals;
 import com.paragon.metalware.controller.*;
 import java.beans.*;
 import java.io.Serializable;
-import java.io.*;
 import com.paragon.db2.*;
 import java.sql.*;
 import javax.servlet.http.*;
@@ -21,7 +20,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 import javax.xml.transform.dom.*;
 import java.util.*;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.json.simple.*;
 
 /**
@@ -355,61 +354,32 @@ public class OrderEntryItemsBean extends Object implements Serializable {
      		}
      		// Product Select 4
             } else if (cb.getPSsel4()==true) {
-                
-        		if (getSel1().equals("ANY")) {
-            		DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETPRODITEM4A");            
-                    sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary"));
-                    sp.setParm("DIST", distNo);
-                    sp.setParm("CLS", getCls1());
-                    sp.setParm("GRD", getGrade());
-                    sp.setParm("TMP", getTemper());
-                    sp.setParm("SHP", getShape());
-                    sp.setParm("THK",  getThick());
-                    sp.executeQuery();
-                    return sp.getResultSetJSON();
-        		} else if (!getGrade().equals("")) {
-        		  DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETPRODITEM4S"); 
-                  sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary"));
-                  sp.setParm("DIST", distNo);
-                  sp.setParm("CLS", getCls1());
-                  sp.setParm("GRD", getGrade());
-                  sp.setParm("TMP", getTemper());
-                  sp.setParm("SHP", getShape());
-                  sp.setParm("THK", getThick());
-                  sp.setParm("SEL1", getSel1());     
-                  sp.setParm("SEL2", getSel2());   
-                  sp.setParm("SEL3", getSel3());   
-                  sp.setParm("SEL4", getSel4());                        
-                  sp.executeQuery();
-                  return sp.getResultSetJSON();
-        		}  else {
-                    DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETPRODITEM4P"); 
-                    try {
-                        FileWriter file = new FileWriter("/home/BEICHHORN/Select.txt");
-                        BufferedWriter bf = new BufferedWriter(file);
-                        bf.write(" GET GRADE IS BLANK");
-                        bf.write(getGrade());
-                        bf.close(); 
-                    }  catch (Exception e) {
-                        e.printStackTrace();
-                    }
-    
-                    sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary"));
-                    sp.setParm("DIST", distNo);
-                    sp.setParm("CLS", getCls1());
-                    sp.setParm("SHP", getShape());
-                    sp.setParm("THK", getThick());
-                    sp.setParm("SEL1", getSel1());     
-                    sp.setParm("SEL2", getSel2());   
-                    sp.setParm("SEL3", getSel3());   
-                    sp.setParm("SEL4", getSel4());                        
-                    sp.executeQuery();
-                    return sp.getResultSetJSON();
-                }
+     		if (getSel1().equals("ANY")) {
+         		DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETPRODITEM4A");            
+                 sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary"));
+                 sp.setParm("DIST", distNo);
+                 sp.setParm("CLS", getCls1());
+                 sp.setParm("SHP", getShape());
+                 sp.setParm("GRD", getGrade());
+                 sp.executeQuery();
+                 return sp.getResultSetJSON();
+     		} else {
+     		  DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETPRODITEM4S");            
+               sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary"));
+               sp.setParm("DIST", distNo);
+               sp.setParm("CLS", getCls1());
+               sp.setParm("SHP", getShape());
+               sp.setParm("GRD", getGrade());
+               sp.setParm("SEL1", getSel1());     
+               sp.setParm("SEL2", getSel2());   
+               sp.setParm("SEL3", getSel3());   
+               sp.setParm("SEL4", getSel4());
+               sp.executeQuery();
+               return sp.getResultSetJSON();
+     		}    		
             // Auto advance "ANY"
         	} else if(getSel1().equals("ANY")) {
                 DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETPRODITEM88");            
-                
                 sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary"));
                 sp.setParm("DIST", distNo);
                 sp.setParm("CLS", getCls1());

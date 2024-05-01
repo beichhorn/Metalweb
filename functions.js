@@ -12,12 +12,12 @@ function getOEJSON() {
         success: function (result, status, xhr) {
           var data = result;
           $("#selectprodtype").children().remove();
-          var str = "js1Data Data:<br>";	
+          var str = "js1Data Data:<br>";
           if (isFlagIdSet("PRDSEL",3) ||
               isFlagIdSet("PRDSEL",6)	) {
             cls = data.js1Data; 
             grd = data.js2Data; 
-            tmp = data.js3Data;
+            tmp = data.js3Data; 
             shp = data.js4Data;
             thk = data.js5Data;
             siz = data.js6Data;
@@ -29,13 +29,10 @@ function getOEJSON() {
             siz = data.js5Data;            	
           } else if (isFlagIdSet("PRDSEL",5)) {
             cls = data.js1Data; 
-            shp = data.js2Data;
+            shp = data.js2Data; 
             grd = data.js3Data; 
-            tmp = data.js4Data;
-            thk = data.js5Data;
-            siz = data.js6Data;
+            siz = data.js4Data;
           }
-          
           GS  = data.GradeSpecs;
           PN  = data.PartNbrs;
           UOM = data.QtyUom;
@@ -44,13 +41,13 @@ function getOEJSON() {
           loadDly();
           loadCls();
           //loaderWidget(false);
+          queryParamFiltering();
         },
           error: function (xhr, status, error) {
           alert(error);
         }
     });	// Logged In or Guest Mode
   } else if (isFlagIdSet("DLYOFR",1)) {
-    
         //loaderWidget(true);
         $.ajax({url: contextPath + "/OrderEntryJSON",
             success: function (result, status, xhr) {
@@ -69,6 +66,7 @@ function getOEJSON() {
           DLY = data.DailyItems;
           loadDly();
           //loaderWidget(false);
+          queryParamFiltering();
         },
           error: function (xhr, status, error) {
           alert(error);
@@ -218,10 +216,7 @@ function loadTemper(selected) {
 }
 
 function loadShape(selected) {
-
-    var options = shp[selected][1];
-
-	if (selected.split("_")[2] == "ANY") {
+	if (selected == "any") {
 	  var wSelGrade  = $('select#grade option:selected').val();
       // Load everything From Grade
 	  for (var property in shp) {
@@ -230,24 +225,20 @@ function loadShape(selected) {
 		  if (property.includes(wSelGrade)) {
 			var options = shp[property][1];
 		    for (o in options) {
-
-			  $('select#shape').append('<option value="'+ options[o][0] +'">'+ options[o][1] +  '</option>');
+			  $('select#shape').append('<option value="'+ options[o][0] +'">'+ property.split('_')[2] + " " + options[o][1] + '</option>');
               
-              // $('.row-filtering > #shape-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('shape','`+options[o][0]+`',this); return false;">`+property.split('_')[2] + " " + options[o][1]+`</button>`);
-              $('.row-filtering > #shape-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('shape','`+options[o][0]+`',this); return false;">`+options[o][1]+`</button>`);
-		    
+              $('.row-filtering > #shape-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('shape','`+options[o][0]+`',this); return false;">`+property.split('_')[2] + " " + options[o][1]+`</button>`);
 		    }
 		  }
 	    }
 	  }
 	// Load only Selected Shape
 	} else {
+	  var options = shp[selected][1];
       for (o in options) {
-        // var desc = options[o][0];
-        // alert(desc);
-         $('select#shape').append('<option value="'+ options[o][0] +'">' + options[o][1] +'</option>');
-         
-         $('.row-filtering > #shape-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('shape','`+options[o][0]+`',this); return false;">`+options[o][1]+`</button>`);
+          $('select#shape').append('<option value="'+ options[o][0] +'">' + options[o][1] +'</option>');
+
+          $('.row-filtering > #shape-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('shape','`+options[o][0]+`',this); return false;">`+options[o][1]+`</button>`);
       }
 	}
 
@@ -269,11 +260,11 @@ function loadThick(selected) {
 		      if (shp.hasOwnProperty(property)) {
 		    	var see = wSelTemper;
 				if (property.includes(wSelTemper)) {
-				  var options = thk[property][1];
+				  var options = shp[property][1];
 			      for (o in options) {
-				   // $('select#shape').append('<option value="'+ options[o][0] +'">'+ property.split('_')[2] + " " + options[o][1] + '</option>');
+				    $('select#shape').append('<option value="'+ options[o][0] +'">'+ property.split('_')[2] + " " + options[o][1] + '</option>');
 
-                   // $('.row-filtering > #shape-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('shape','`+options[o][0]+`',this); return false;">`+property.split('_')[2] + " " + options[o][1]+`</button>`);
+                    $('.row-filtering > #shape-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('shape','`+options[o][0]+`',this); return false;">`+property.split('_')[2] + " " + options[o][1]+`</button>`);
 				  }
 			    }
 			  }
@@ -286,18 +277,18 @@ function loadThick(selected) {
 			    if (property.includes(wSelGrade)) {
 			      var options = shp[property][1];
 		          for (o in options) {
-			       // $('select#shape').append('<option value="'+ options[o][0] +'">'+ property.split('_')[2] + " " + options[o][1] + '</option>');
+			        $('select#shape').append('<option value="'+ options[o][0] +'">'+ property.split('_')[2] + " " + options[o][1] + '</option>');
 
-                  //  $('.row-filtering > #shape-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('shape','`+options[o][0]+`',this); return false;">`+property.split('_')[2] + " " + options[o][1]+`</button>`);
+                    $('.row-filtering > #shape-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('shape','`+options[o][0]+`',this); return false;">`+property.split('_')[2] + " " + options[o][1]+`</button>`);
 			      }
 		        }
 		      }
 	        }
 	  	  }
 	// Load only Selected Shape
-	} else {
-	  var options = thk[selected][1];                                                               
-	  for (o in options) {                                                                         
+	} else {	
+	  var options = thk[selected][1];                                                                       
+	  for (o in options) {                                                                              
 	     $('select#thick').append('<option value="' + options[o][0] + '">' + options[o][1] + '</option>');
 
          $('.row-filtering > #thick-options .btn-group').append(`<button type="button" class="btn bs-btn fbtn fw-bold btn-outline-light" onClick="updateDropdown('thick','`+options[o][0]+`',this); return false;">`+options[o][1]+`</button>`);
@@ -323,7 +314,6 @@ function loadSize(selected) {
 		}
       }
 	} else {
-        
       var options = siz[selected][1];
       for (o in options) {
         $('select#size').append('<option value="'+ options[o][0] +'">' + options[o][1]+'</option>');
@@ -357,7 +347,6 @@ function updateDropdown(sel,val,btn=false) {
     $("#" + sel).val(val).change();
     if (btn) toggleActiveClass(btn);
 }
-
 
 function productsLoader(show,msg) {
 	if (!msg) {
@@ -393,7 +382,6 @@ function productSelector(partInfo, dailyOfr, itmQty, loadMsg) {
     if (qty === '' || qty === null || qty === 0) {
         qty = 1;
     }
-
     if (loadMsg) {
         locateProduct(class1, grade, temper, shape, thick, size1, size2, size3, size4, uom, qty, partInfo, dailyOfr, loadMsg);
     } else {
@@ -409,18 +397,13 @@ function locateProduct(class1, grade, temper, shape, sort, size1, size2, size3, 
     }
     $('#product-listings').empty();
     productsLoader(true,msg);
-    var size2 = "";
-    var size3 = "";
-    var size4 = "";
-
+    
     $.ajax({url: contextPath + "/OrderEntryJSON",
         type: "POST",
         data: {"action": "itemsearch",
-            "lib": "MNFSALES",
-            "dist": "01",
             "cls":    class1,
         	"grade":  grade,
-        	"temper": "ANY",
+        	"temper": temper,
             "shape":  shape,
             "thick":  sort,
             "sel1":   size1,
@@ -428,8 +411,7 @@ function locateProduct(class1, grade, temper, shape, sort, size1, size2, size3, 
             "sel3":   size3,
             "sel4":   size4,
             "partInfo": partInfo,
-            "dailyOfr": dailyOfr
-             }, 
+            "dailyOfr": dailyOfr},
         success: function (result, status, xhr) {
             if (Array.isArray(result)) {
                 if (result.length > 0) {
@@ -439,7 +421,7 @@ function locateProduct(class1, grade, temper, shape, sort, size1, size2, size3, 
                   } else {
                     itemLookup(result, uom, qty, dailyOfr, false);
                   }
-                } else { 
+                } else {
                     productsLoader(false);
                     displayError("SORRY, NO ITEMS WERE FOUND. <br>Please use the Product Selector to search for another item. <br>In case of a system error, please <a href=\"\" onclick=\"reloadPage()\">RELOAD</a> the page and try your search again.");
                     //loaderWidget(false);
@@ -451,7 +433,6 @@ function locateProduct(class1, grade, temper, shape, sort, size1, size2, size3, 
             }
         },
         error: function (xhr, status, error) {
-            alert("ERROR!!");
             productsLoader(false);
             displayError(error);
             //loaderWidget(false);
@@ -1865,6 +1846,40 @@ function reloadPage(type) {
 	  location.reload();
 	}
     bootstrapUiFix();
+}
+
+// sets filters based on what was passed in url
+function setQueryParamFilter(cat,val) {
+	if (cat === 'cls') {
+		Object.entries(cls).map(arr => {
+			const key = arr[0];
+			const value = arr[1][0];
+			
+			if (value === val.toUpperCase()) {
+				selectedCatKey = key;
+				updateDropdown(cat,key);
+			}
+		})
+	} else if (cat === 'shape') {
+		const found = shp[selectedCatKey][1].find((element) => element[1] = val.toUpperCase());
+		updateDropdown(cat,found[0]);
+	}
+}
+
+function queryParamFiltering() {
+	// get url search params, proxy cannot be iterated but we know what to expect
+	const params = new Proxy(new URLSearchParams(window.location.search), {
+		get: (searchParams, prop) => searchParams.get(prop),
+	});
+	// class
+	let classVal = params.class;
+	if (classVal) setQueryParamFilter('cls',classVal);
+	// shape
+	let shapeVal = params.shape;
+	if (shapeVal) setQueryParamFilter('shape',shapeVal);
+	// login - show login popup after page load
+	let loginVal = params.login;
+	if (loginVal) $('#login').modal('toggle');
 }
 
 function jsonLogout() {

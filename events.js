@@ -117,8 +117,7 @@ $(document).on('change', 'select#cls', function (e) {
  
 // "Grade" selection
 $(document).on('change', 'select#grade', function (e) {
-    
-    gradeSelected = this.options[e.target.selectedIndex].value;
+    gradeSelected = this.options[e.target.selectedIndex].value;   
     resetSelect('sspec',  true);
     enableLabel('spec',   false);
     clearBtnFilters('sspec', true);
@@ -162,19 +161,13 @@ $(document).on('change', 'select#grade', function (e) {
           enableLabel('shape', true);    	
        // Next is Size
       } else if (isFlagIdSet("PRDSEL",5)) {
-          // resetSelect('temper', true);
-          // enableLabel('temper', false);
-          // clearBtnFilters('temper');  
-          // resetSelect('thick',  true);
-          // enableLabel('thick',  false);
-          // clearBtnFilters('thick', true);
-          resetSelect('uom',    true);
-          enableLabel('uom',    false);
-          clearBtnFilters('uom',true); 
-          // loadGradeSpec(gradeSelected);
-          // loadTemper(gradeSelected);	       
-         // enableSelect('temper');
-         // enableLabel('temper', true);
+          resetSelect('size',  true);
+          enableLabel('size',  false);
+          clearBtnFilters('size',true); 
+          loadSize(gradeSelected);	       
+          enableSelect('size');
+          enableLabel('size', true)
+          //$('select#uom').trigger("change");  
       }
     // none Selected
     } else {
@@ -204,10 +197,11 @@ $(document).on('change', 'select#grade', function (e) {
 //"Temper" selection
 $(document).on('change', 'select#temper', function (e) {	
  var temperSelected = this.options[e.target.selectedIndex].value;
- // var selections = temperSelected.split("_");
- // temperSelected = selections[2];
  
  // Reset content and labels
+ resetSelect('shape', true);
+ enableLabel('shape', false);
+ clearBtnFilters('shape');   
  resetSelect('thick', true);
  enableLabel('thick', false); 
  clearBtnFilters('thick', true);   
@@ -216,22 +210,12 @@ $(document).on('change', 'select#temper', function (e) {
  clearBtnFilters('size', true);   
  resetSelect('uom',   true);
  enableLabel('uom',   false);
- clearBtnFilters('uom', true);
+ clearBtnFilters('uom', true);   
  
  if (temperSelected !== 'none') {
-   if (isFlagIdSet("PRDSEL",3)) {
-     resetSelect('shape', true);
-     enableLabel('shape', false);
-     clearBtnFilters('shape');  
-     loadShape(temperSelected);
-     enableSelect('shape');
-     enableLabel('shape', true);
-   }  
-   else {
-     loadThick(temperSelected); 
-     enableSelect('thick');
-     enableLabel('thick', true);
-   }
+   loadShape(temperSelected)
+   enableSelect('shape');
+   enableLabel('shape', true);
  }
 });
 
@@ -262,28 +246,23 @@ $(document).on('change', 'select#shape', function (e) {
           enableLabel('uom',   false);
           clearBtnFilters('uom');
       } else if (isFlagIdSet("PRDSEL",5)) {
-    	  resetSelect('grade',  true); 
-          enableLabel('grade',  false);   //Benjamin needed this 05/11/21
+    	  resetSelect('grade',  true);     //Benjamin needed this 05/11/21
+    	  enableLabel('grade',  false);    //Benjamin needed this 05/11/21
           clearBtnFilters('grade'); 
-          resetSelect('temper',  true);
-          enableLabel('temper',  false);	
-          clearBtnFilters('temper',true); 
-          resetSelect('thick',  true);
-          enableLabel('thick',  false);	
-          clearBtnFilters('thick',true); 
           resetSelect('size',  true);
           enableLabel('size',  false);	
           clearBtnFilters('size',true); 
           resetSelect('uom',   true);
           enableLabel('uom',   false);
-          clearBtnFilters('uom');
+          clearBtnFilters('uom',true);
       }
       
     // Next is Thick
     if (shapeSelected != 'none') {
       if (isFlagIdSet("PRDSEL",3) ||
-    	  isFlagIdSet("PRDSEL",6)) { 
+    	  isFlagIdSet("PRDSEL",6)) {  
           loadThick(shapeSelected);
+            console.log(UOM[shapeSelected.split("_")[3]]);
 	      uomS = UOM[shapeSelected.split("_")[3]][1];
 	      loadUOM(uomS);
           enableSelect('thick');
@@ -291,6 +270,7 @@ $(document).on('change', 'select#shape', function (e) {
        // Next is Thick
       } else if (isFlagIdSet("PRDSEL",4)) {
           loadThick(shapeSelected);
+            console.log(shapeSelected.split("_"));
 	      uomS = UOM[shapeSelected.split("_")[2]][1];
 	      loadUOM(uomS);
           enableSelect('thick');
@@ -298,14 +278,11 @@ $(document).on('change', 'select#shape', function (e) {
        // Next is Size
       } else if (isFlagIdSet("PRDSEL",5)) {
           loadGrade(shapeSelected);
-          loadTemper(shapeSelected);
-          loadThick(shapeSelected);
+          	console.log(UOM[shapeSelected.split("_")[1]]);
+          uomS = UOM[shapeSelected.split("_")[1]][1];   //Benjamin needed this 06/16/21 corrected
+	      loadUOM(uomS);
           enableSelect('grade');
           enableLabel('grade', true)
-          enableSelect('temper');
-          enableLabel('temper', true)
-          enableSelect('thick');
-          enableLabel('thick', true)
       }
       enableSelect('uom');
       enableLabel('uom', true);
@@ -323,8 +300,8 @@ $(document).on('change', 'select#thick', function (e) {
     // Next is Size
     if (thickSelected != 'none') {
       if (isFlagIdSet("PRDSEL",3) ||
-    	  isFlagIdSet("PRDSEL",6)) { 
-        loadSize(thickSelected);     
+    	  isFlagIdSet("PRDSEL",6)) {  
+        loadSize(thickSelected);	       
         enableSelect('size');
         enableLabel('size', true);
         $('select#uom').trigger("change");
@@ -335,16 +312,6 @@ $(document).on('change', 'select#thick', function (e) {
         enableLabel('size', true);
         $('select#uom').trigger("change");
       }
-        else if (isFlagIdSet("PRDSEL",5)) {
-	    uomS = UOM[shapeSelected.split("_")[1]][1];
-	    loadUOM(uomS);
-        enableSelect('uom');
-        enableLabel('uom', true); 
-        loadSize(thickSelected);
-        enableSelect('size');
-        enableLabel('size', true);
-        // $('select#uom').trigger("change");
-      }
     }
 });
             
@@ -354,7 +321,7 @@ $(document).on('change', 'select#size', function (e) {
     options = this.options[e.target.selectedIndex].value;
     wSelect = options.split('_');
     if (isFlagIdSet("PRDSEL",3) ||
-    	isFlagIdSet("PRDSEL",6)) {    
+    	isFlagIdSet("PRDSEL",6)) {
       if (wSelect[0] != "any") {
         class1   = wSelect[0];	
         grade    = wSelect[1];	
@@ -391,26 +358,15 @@ $(document).on('change', 'select#size', function (e) {
     } else if (isFlagIdSet("PRDSEL",5)) {
       if (wSelect[0] != "any") {
         class1   = wSelect[0];	
-        shape    = wSelect[1]; 
-        grade    = wSelect[2];	
-        temper   = wSelect[3];
-        thick    = wSelect[4];
-        size1    = wSelect[5]; 
-        size2    = wSelect[6];
-        size3    = wSelect[7];
-        size4    = wSelect[8];
-
-        if (!size4) {
-          grade    = null;	
-          temper   = null;
-          thick    = wSelect[2];
-          size1    = wSelect[3]; 
-          size2    = wSelect[4];
-          size3    = wSelect[5];
-          size4    = wSelect[6];
-        }
-        
+        shape    = wSelect[1];	
+        grade    = wSelect[2]; 
+        size1    = wSelect[3]; 
+        size2    = wSelect[4];
+        size3    = wSelect[5];
+        size4    = wSelect[6];
         uom      = document.getElementById("uom").value;
+        temper   = "";
+        thick    = "";
         qty      = 1;  
         partInfo = "";
         dailyOfr = "";
@@ -429,7 +385,6 @@ $(document).on('change', 'select#uom', function (e) {
          options = $('select#thick option:selected').val();
        }
        wSelect  = options.split('_');
-
        if (wSelect[0] != "any") {
          class1 = wSelect[0];	
          grade  = wSelect[1];
@@ -464,30 +419,23 @@ $(document).on('change', 'select#uom', function (e) {
          }
        }
     } else if (isFlagIdSet("PRDSEL",5)) {
-        if ($('select#thick option:selected').val() == "any") {
-          options = $('select#shape option:selected').val();  
-        } else {
-          options = $('select#thick option:selected').val();
-        }
-        wSelect  = options.split('_');
- 
-        if (wSelect[0] != "any") {
-          class1 = wSelect[0];	
-          shape  = wSelect[1]; 
-          grade  = wSelect[2];
-          temper = wSelect[3];
-          if ($('select#thick option:selected').val() == "any") {
-            thick = ""; 
-          } else {
-            thick = wSelect[4];
-          }
-          if (typeof size1 == 'undefined') { //Added 06/16/21
-            size1 = 'ANY'; 
-            size2 = 'ANY';
-            size3 = 'ANY';
-            size4 = 'ANY';        	 
-          }
-        }
+       options = $('select#size option:selected').val();
+       wSelect  = options.split('_'); 
+       if (wSelect[0] == "any") {
+    	 options = $('select#grade option:selected').val();
+         wSelect = options.split('_');   
+         class1 = wSelect[0];	
+         shape  = wSelect[1];	
+         grade  = wSelect[2]; 
+         temper = "";
+         thick  = "";
+         if (typeof size1 == 'undefined') { //Added 06/16/21
+           size1  = 'ANY'; 
+           size2  = 'ANY';
+           size3  = 'ANY';
+           size4  = 'ANY';
+         }
+       } 
     }
     qty      = 1; 
     uom      = document.getElementById("uom").value;  //Load uom here only 06/16/21 
@@ -737,5 +685,6 @@ $(document).on('submit', 'form#order-info', function(event) {
         
         $('form#order-info :input[required="required"], form#order-info select[required="required"]').on('change', function() { 
             //$(this).trigger('input'); 
+            alert("CHANGED");
         });
 
