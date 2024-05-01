@@ -162,19 +162,19 @@ $(document).on('change', 'select#grade', function (e) {
           enableLabel('shape', true);    	
        // Next is Size
       } else if (isFlagIdSet("PRDSEL",5)) {
-          resetSelect('temper', true);
-          enableLabel('temper', false);
-          clearBtnFilters('temper');  
-          resetSelect('thick',  true);
-          enableLabel('thick',  false);
-          clearBtnFilters('thick', true);
+          // resetSelect('temper', true);
+          // enableLabel('temper', false);
+          // clearBtnFilters('temper');  
+          // resetSelect('thick',  true);
+          // enableLabel('thick',  false);
+          // clearBtnFilters('thick', true);
           resetSelect('uom',    true);
           enableLabel('uom',    false);
           clearBtnFilters('uom',true); 
-          loadGradeSpec(gradeSelected);
-          loadTemper(gradeSelected);	       
-          enableSelect('temper');
-          enableLabel('temper', true);
+          // loadGradeSpec(gradeSelected);
+          // loadTemper(gradeSelected);	       
+         // enableSelect('temper');
+         // enableLabel('temper', true);
       }
     // none Selected
     } else {
@@ -265,6 +265,12 @@ $(document).on('change', 'select#shape', function (e) {
     	  resetSelect('grade',  true); 
           enableLabel('grade',  false);   //Benjamin needed this 05/11/21
           clearBtnFilters('grade'); 
+          resetSelect('temper',  true);
+          enableLabel('temper',  false);	
+          clearBtnFilters('temper',true); 
+          resetSelect('thick',  true);
+          enableLabel('thick',  false);	
+          clearBtnFilters('thick',true); 
           resetSelect('size',  true);
           enableLabel('size',  false);	
           clearBtnFilters('size',true); 
@@ -291,14 +297,15 @@ $(document).on('change', 'select#shape', function (e) {
           enableLabel('thick', true);    	
        // Next is Size
       } else if (isFlagIdSet("PRDSEL",5)) {
-          // String UOM[]  = new String(2);
-          // UOM = shapeSelected.split("_");
-          // uomS = UOM[1];   //Benjamin needed this 06/16/21 corrected
-	      // loadUOM(uomS);
-         //  loadShape(clsSelected);
           loadGrade(shapeSelected);
+          loadTemper(shapeSelected);
+          loadThick(shapeSelected);
           enableSelect('grade');
           enableLabel('grade', true)
+          enableSelect('temper');
+          enableLabel('temper', true)
+          enableSelect('thick');
+          enableLabel('thick', true)
       }
       enableSelect('uom');
       enableLabel('uom', true);
@@ -336,7 +343,7 @@ $(document).on('change', 'select#thick', function (e) {
         loadSize(thickSelected);
         enableSelect('size');
         enableLabel('size', true);
-        $('select#uom').trigger("change");
+        // $('select#uom').trigger("change");
       }
     }
 });
@@ -392,6 +399,17 @@ $(document).on('change', 'select#size', function (e) {
         size2    = wSelect[6];
         size3    = wSelect[7];
         size4    = wSelect[8];
+
+        if (!size4) {
+          grade    = null;	
+          temper   = null;
+          thick    = wSelect[2];
+          size1    = wSelect[3]; 
+          size2    = wSelect[4];
+          size3    = wSelect[5];
+          size4    = wSelect[6];
+        }
+        
         uom      = document.getElementById("uom").value;
         qty      = 1;  
         partInfo = "";
