@@ -109,6 +109,9 @@ public class OrderEntryJSON extends HttpServlet {
             items.setShape(request.getParameter("shape"));
             items.setThick(request.getParameter("thick"));
             items.setSel1(request.getParameter("sel1"));
+            items.setSel2(request.getParameter("sel2"));
+            items.setSel3(request.getParameter("sel3"));
+            items.setSel4(request.getParameter("sel4"));
             // Info will only be loaded when everything else is empty
             if ((request.getParameter("cls")).isEmpty()) {
                 

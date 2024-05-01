@@ -423,12 +423,12 @@ function locateProduct(class1, grade, temper, shape, sort, size1, size2, size3, 
         	"temper": "ANY",
             "shape":  shape,
             "thick":  sort,
-            "sel1":   size1
-            //"sel2":   size2,
-            //"sel3":   size3,
-            //"sel4":   size4,
-            //"partInfo": partInfo,
-            //"dailyOfr": dailyOfr},
+            "sel1":   size1,
+            "sel2":   size2,
+            "sel3":   size3,
+            "sel4":   size4,
+            "partInfo": partInfo,
+            "dailyOfr": dailyOfr
              }, 
         success: function (result, status, xhr) {
             if (Array.isArray(result)) {

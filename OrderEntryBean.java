@@ -1457,7 +1457,7 @@ public class OrderEntryBean extends Object implements Serializable {
           js4.append("\"js4Data\":{"); 
 
           while (rs.next()) { 
-            key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim() + "_" + rs.getString("key03").trim());
+            key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim());
             sel04=JSONObject.escape(rs.getString("sel04").trim());
             dsc04=JSONObject.escape(rs.getString("dsc04").trim()); 
 
@@ -1501,7 +1501,7 @@ public class OrderEntryBean extends Object implements Serializable {
           key01W="";key02W="";
           js5.append("\"js5Data\":{");        	    
           while (rs.next()) {            	
-            key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim() + "_" + rs.getString("key03").trim() + "_" + rs.getString("key04").trim());
+            key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim());
             sel02=JSONObject.escape(rs.getString("sel02").trim());
             dsc02=JSONObject.escape(rs.getString("dsc02").trim()); 
             // 1st part           
@@ -1540,7 +1540,7 @@ public class OrderEntryBean extends Object implements Serializable {
           key01W="";key02W="";
           js6.append("\"js6Data\":{");        	    
           while (rs.next()) {            	
-              key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim() + "_" + rs.getString("key03").trim()  + "_" + rs.getString("key04").trim() + "_" + rs.getString("key05").trim());
+              key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim() + "_" + rs.getString("key05").trim());
               sel02=JSONObject.escape(rs.getString("sel1").trim() + "_" + rs.getString("sel2").trim() + "_" + rs.getString("sel3").trim() + "_" + rs.getString("sel4").trim());
               if (!rs.getString("DSP4").equals("0.0000")) {       
                 dsc02=rs.getString("DSP1") + " X " +               

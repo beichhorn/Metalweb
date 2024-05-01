@@ -81,17 +81,6 @@ public class DB2storedproc extends DB2RequestRoot {
         }
         out +=  "}";
 
-        try {
-            FileWriter geek_file; 
-            geek_file = new FileWriter("/home/BEICHHORN/procname.txt", true);
-            BufferedWriter geekwrite = new BufferedWriter(geek_file);
-            geekwrite.write("OUT= "); 
-            geekwrite.write(out);
-            geekwrite.close(); 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
         return out;
     }
     
@@ -104,22 +93,11 @@ public class DB2storedproc extends DB2RequestRoot {
             Class c = Class.forName("java.sql.CallableStatement");
             Class argtypes[] = new Class[]{String.class, String.class};
             Method m = c.getMethod("setString", argtypes); 
-            FileWriter geek_file; 
-                geek_file = new FileWriter("/home/BEICHHORN/parms.txt",true);
-                BufferedWriter geekwrite = new BufferedWriter(geek_file);
             if (Parms.containsValue(parmName)){
                 sp = (spParm)Parms.get(parmName);
-                sp.parm = parm;
-                geekwrite.write("PARM1");
-                geekwrite.write(parmName + System.lineSeparator());
-                geekwrite.write(parm + System.lineSeparator());
-                geekwrite.close();    
+                sp.parm = parm;   
             }else
                 Parms.put(parmName, new spParm(parmName, parm, m));
-                geekwrite.write("PARM2");
-                geekwrite.write(parmName + System.lineSeparator());
-                geekwrite.write(parm + System.lineSeparator());
-                geekwrite.close();    
         }catch (Exception e) {
             e.printStackTrace();
             System.exit(2);
@@ -137,13 +115,6 @@ public class DB2storedproc extends DB2RequestRoot {
                 sp.parm = new Integer(parm);
             }else 
                 Parms.put(parmName, new spParm(parmName, new Integer(parm), m));
-                FileWriter geek_file; 
-                geek_file = new FileWriter("/home/BEICHHORN/parms.txt",true);
-                BufferedWriter geekwrite = new BufferedWriter(geek_file); 
-                geekwrite.write("PARM3 ");
-                geekwrite.write(parmName + System.lineSeparator());
-                geekwrite.write(parm + System.lineSeparator());
-                geekwrite.close();    
 
         }catch (Exception e) {
             e.printStackTrace();
@@ -230,21 +201,15 @@ public class DB2storedproc extends DB2RequestRoot {
         spParm sp;
         try {
             
-            FileWriter geek_file; 
-            geek_file = new FileWriter("/home/BEICHHORN/lp.txt", true);
-            BufferedWriter geekwrite = new BufferedWriter(geek_file);
-
-           // for (int i=0; i<Parms.size(); i++) {
+            // for (int i=0; i<Parms.size(); i++) {
             Iterator P = Parms.values().iterator();
 
             //System.out.println(P);
             while (P.hasNext()){
                 sp = (spParm)P.next();
-                geekwrite.write(sp.parmName + System.lineSeparator());
-                geekwrite.write(sp.parm + System.lineSeparator());
                 sp.setmethod.invoke(stmt, new Object[]{sp.parmName, sp.parm});
             } 
-            geekwrite.close();
+
          } catch (Exception e) {
                 e.printStackTrace();
          }  
