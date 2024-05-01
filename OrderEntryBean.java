@@ -10,11 +10,12 @@ import com.paragon.metalware.Globals;
 import com.paragon.metalware.controller.*;
 import java.beans.*;
 import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 import com.paragon.db2.*;
 import java.sql.*;
 import javax.servlet.http.*;
-import javax.servlet.jsp.*;
+// import javax.servlet.jsp.*;
 
 import org.json.simple.JSONObject;
 /**
@@ -613,6 +614,7 @@ public class OrderEntryBean extends Object implements Serializable {
             	js3.append("}");
             }
             rs.close();
+
         } catch (Exception e) {
         	js3.append("}");
             e.printStackTrace();
@@ -622,9 +624,10 @@ public class OrderEntryBean extends Object implements Serializable {
         rs = sp.getNextResult(); 
         try {
             key01W="";key02W="";
-            js4.append("\"js4Data\":{");        	    
+            js4.append("\"js4Data\":{");   
             while (rs.next()) {            	
               key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim() + "_" + rs.getString("key03").trim());
+              
               sel02=JSONObject.escape(rs.getString("sel02").trim());
               dsc02=JSONObject.escape(rs.getString("dsc02").trim()); 
               // 1st part           
@@ -636,12 +639,13 @@ public class OrderEntryBean extends Object implements Serializable {
                 key01W=key01;key02W="";
               }
               // 2nd part
-              key02=key01W +"_" + sel02;
+              key02=key01W +"_"+sel02;
+              
               if (!key02W.equals(key02)) {
                 if (!key02W.equals("")) {
                   js4.append(",");
-                }
-                js4.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                     
+                } 
+                js4.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                    
                 key02W=key02;
               }
             }
@@ -718,7 +722,8 @@ public class OrderEntryBean extends Object implements Serializable {
               	        rs.getString("DSP2");                           
               	} else {                                            
               	  dsc02=rs.getString("DSP1").trim();                   
-              	}                                                   
+              	} 
+
                 // 1st part           
                 if (!key01W.equals(key01)) { 
                   if (!key01W.equals("")) {
@@ -1082,6 +1087,7 @@ public class OrderEntryBean extends Object implements Serializable {
             	js4.append("}");
             }
             rs.close();
+             
         } catch (Exception e) {
         	js4.append("}");
             e.printStackTrace();
@@ -1301,357 +1307,448 @@ public class OrderEntryBean extends Object implements Serializable {
     }
     
     public String getProdSel04JSON(String cdist, String ccust, String userid) { 
-        StringBuilder js1 = new StringBuilder();    	
-        StringBuilder js2 = new StringBuilder();
-        StringBuilder js3 = new StringBuilder();
-        StringBuilder js4 = new StringBuilder();
-        StringBuilder js5 = new StringBuilder();
-        StringBuilder js6 = new StringBuilder();
-        StringBuilder js7 = new StringBuilder();
-        StringBuilder js8 = new StringBuilder();
-        String key01  ="";String key01W="";
-        String key02  ="";String key02W="";
-        String sel02  ="";String sel02W="";
-        String dsc02  ="";
-
-            
-        DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETPRODSEL04");
-        sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary")); 
-        sp.setParm("CDIST", cdist);
-        sp.setParm("CCUST", ccust);
-        sp.setParm("USRID", userid);
+      
+      StringBuilder js1 = new StringBuilder();    	
+      StringBuilder js2 = new StringBuilder();
+      StringBuilder js3 = new StringBuilder();
+      StringBuilder js4 = new StringBuilder();
+      StringBuilder js5 = new StringBuilder();
+      StringBuilder js6 = new StringBuilder();
+      StringBuilder js7 = new StringBuilder();
+      StringBuilder js8 = new StringBuilder();
+      StringBuilder js9 = new StringBuilder();
+      StringBuilder jsA = new StringBuilder();
+      String key01  ="";String key01W="";
+      String key02  ="";String key02W="";
+      String sel02  ="";String sel02W="";
+      String dsc02  ="";
+      String sel04  ="";String sel04W="";
+      String dsc04  ="";
         
-        // Result set 1 of   
-        ResultSet rs = sp.executeQuery();
-        try {
-            key01W="";
-            js1.append("\"js1Data\":{");        	    
-            while (rs.next()) {            	
-              key01=JSONObject.escape(rs.getString("key01").trim());  
-              sel02=JSONObject.escape(rs.getString("key01").trim());
-              dsc02=JSONObject.escape(rs.getString("dsc01").trim()); 
-              // 1st part           
-              if (!key01W.equals(key01)) { 
-                if (!key01W.equals("")) {
-                  js1.append("]],");
-                }
-           	    js1.append("\"" + key01 + "\":[\"" + dsc02 + "\",[");
-                key01W=key01;key02W="";
+      DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETPRODSEL04");
+      sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary")); 
+      sp.setParm("CDIST", cdist);
+      sp.setParm("CCUST", ccust);
+      sp.setParm("USRID", userid);
+      
+      // Result set 1 of   
+      ResultSet rs = sp.executeQuery();
+      try {
+          key01W="";
+          js1.append("\"js1Data\":{");        	    
+          while (rs.next()) {            	
+            key01=JSONObject.escape(rs.getString("key01").trim());  
+            sel02=JSONObject.escape(rs.getString("key01").trim());
+            dsc02=JSONObject.escape(rs.getString("dsc01").trim()); 
+            // 1st part           
+            if (!key01W.equals(key01)) { 
+              if (!key01W.equals("")) {
+                js1.append("]],");
               }
-              // 2nd part
-              key02=sel02;
-              if (!key02W.equals(key02)) {
-                if (!sel02W.equals("")) {
-                  js1.append(",");
-                }
-                js1.append("[\"" + key02 + "\"]");                     
-                key02W=key02;
+               js1.append("\"" + key01 + "\":[\"" + dsc02 + "\",[");
+              key01W=key01;key02W="";
+            }
+            // 2nd part
+            key02=sel02;
+            if (!key02W.equals(key02)) {
+              if (!sel02W.equals("")) {
+                js1.append(",");
               }
+              js1.append("[\"" + key02 + "\"]");                     
+              key02W=key02;
             }
-            // Check for data
-            if (!key01W.equals("")) {
-            	js1.append("]]}");
-            } else {
-            	js1.append("}");
-            }
-            rs.close();
-         } catch (Exception e) {
-        	 js1.append("}");
-             e.printStackTrace();
-         } 
-               
-        // Result set 2 of   
-        rs = sp.getNextResult(); 
-        try {
-             key01W="";key02W="";
-             js2.append("\"js2Data\":{");        	    
-             while (rs.next()) {            	
-               key01=JSONObject.escape(rs.getString("key01").trim());  
-               sel02=JSONObject.escape(rs.getString("sel02").trim());
-               dsc02=JSONObject.escape(rs.getString("dsc02").trim()); 
-               // 1st part           
-               if (!key01W.equals(key01)) { 
-                 if (!key01W.equals("")) {
-                   js2.append("]],");
-                 }
-            	 js2.append("\"" + key01 + "\":[\"" + key01 + "\",[");
-                 key01W=key01;key02W="";
-               }
-               // 2nd part
-               key02=key01W +"_" + sel02;
-               if (!key02W.equals(key02)) {
-                 if (!key02W.equals("")) {
-                   js2.append(",");
-                 }
-                 js2.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                     
-                 key02W=key02;
-               }
-             }
+          }
           // Check for data
           if (!key01W.equals("")) {
-          	js2.append("]]}");
+            js1.append("]]}");
           } else {
-           	js2.append("}");
+            js1.append("}");
           }
           rs.close();
-        } catch (Exception e) {
-           js2.append("}");
+       } catch (Exception e) {
+          js1.append("}");
            e.printStackTrace();
+       } 
+             
+      // Result set 2 of   
+      rs = sp.getNextResult(); 
+      try {
+           key01W="";key02W="";
+           js2.append("\"js2Data\":{");        	    
+           while (rs.next()) {            	
+             key01=JSONObject.escape(rs.getString("key01").trim());  
+             sel02=JSONObject.escape(rs.getString("sel02").trim());
+             dsc02=JSONObject.escape(rs.getString("dsc02").trim()); 
+             // 1st part           
+             if (!key01W.equals(key01)) { 
+               if (!key01W.equals("")) {
+                 js2.append("]],");
+               }
+             js2.append("\"" + key01 + "\":[\"" + key01 + "\",[");
+               key01W=key01;key02W="";
+             }
+             // 2nd part
+             key02=key01W +"_" + sel02;
+             if (!key02W.equals(key02)) {
+               if (!key02W.equals("")) {
+                 js2.append(",");
+               }
+               js2.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                     
+               key02W=key02;
+             }
+           }
+        // Check for data
+        if (!key01W.equals("")) {
+          js2.append("]]}");
+        } else {
+           js2.append("}");
         }
-        
-        // Result set 3 
-        rs = sp.getNextResult(); 
-        try {
-            key01W="";key02W="";
-            js3.append("\"js3Data\":{");        	    
-            while (rs.next()) {            	
-              key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim());
-              sel02=JSONObject.escape(rs.getString("sel02").trim());
-              dsc02=JSONObject.escape(rs.getString("dsc02").trim()); 
-              // 1st part           
-              if (!key01W.equals(key01)) { 
-                if (!key01W.equals("")) {
-                  js3.append("]],");
-                }
-           	    js3.append("\"" + key01 + "\":[\"" + key01 + "\",[");
-                key01W=key01;key02W="";
+        rs.close();
+      } catch (Exception e) {
+         js2.append("}");
+         e.printStackTrace();
+      }
+      
+      // Result set 3 
+      rs = sp.getNextResult(); 
+      try {
+          key01W="";key02W="";
+          js3.append("\"js3Data\":{");        	    
+          while (rs.next()) {            	
+            key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim());
+            sel02=JSONObject.escape(rs.getString("sel02").trim());
+            dsc02=JSONObject.escape(rs.getString("dsc02").trim()); 
+            // 1st part           
+            if (!key01W.equals(key01)) { 
+              if (!key01W.equals("")) {
+                js3.append("]],");
               }
-              // 2nd part
-              key02=key01W +"_" + sel02;
-              if (!key02W.equals(key02)) {
-                if (!key02W.equals("")) {
-                  js3.append(",");
-                }
-                js3.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                     
-                key02W=key02;
+               js3.append("\"" + key01 + "\":[\"" + key01 + "\",[");
+              key01W=key01;key02W="";
+            }
+            // 2nd part
+            key02=key01W +"_" + sel02;
+            if (!key02W.equals(key02)) {
+              if (!key02W.equals("")) {
+                js3.append(",");
               }
+              js3.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                     
+              key02W=key02;
             }
-            // Check for data
-            if (!key01W.equals("")) {
-            	js3.append("]]}");
-            } else {
-            	js3.append("}");
-            }
-            rs.close();
-        } catch (Exception e) {
-        	js3.append("}");
-            e.printStackTrace();
-        }
+          }
+          // Check for data
+          if (!key01W.equals("")) {
+            js3.append("]]}");
+          } else {
+            js3.append("}");
+          }
+          rs.close();
+
+      } catch (Exception e) {
+        js3.append("}");
+          e.printStackTrace();
+      }
+      
+      // Result set 4 
+      rs = sp.getNextResult(); 
+      try {
         
-        // Result set 4 
-        rs = sp.getNextResult(); 
-        try {
-            key01W="";key02W="";
-            js4.append("\"js4Data\":{");        	    
-            while (rs.next()) {            	
-              key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim() + "_" + rs.getString("key03").trim());
+          key01W="";key02W="";
+          js4.append("\"js4Data\":{"); 
+
+          while (rs.next()) { 
+            key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim());
+            sel04=JSONObject.escape(rs.getString("sel04").trim());
+            dsc04=JSONObject.escape(rs.getString("dsc04").trim()); 
+
+            // 1st part           
+            if (!key01W.equals(key01)) { 
+              if (!key01W.equals("")) {
+                js4.append("]],");
+              }
+               js4.append("\"" + key01 + "\":[\"" + key01 + "\",[");
+              key01W=key01;key02W="";
+            }
+            // 2nd part
+            key02=key01W +"_"+sel04;
+            
+            if (!key02W.equals(key02)) {
+              if (!key02W.equals("")) {
+                js4.append(",");
+              } 
+              js4.append("[\"" + key02 + "\",\"" + dsc04 + "\"]");                    
+              key02W=key02;
+            }
+
+          }
+          // Check for data
+          if (!key01W.equals("")) {
+            js4.append("]]}");
+          } else {
+            js4.append("}");
+          }
+          rs.close();
+
+      } catch (Exception e) {
+        js4.append("}");
+          e.printStackTrace();
+      }
+            
+      
+      // Result set 5 
+      rs = sp.getNextResult(); 
+      try {
+          key01W="";key02W="";
+          js5.append("\"js5Data\":{");        	    
+          while (rs.next()) {            	
+            key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim());
+            sel02=JSONObject.escape(rs.getString("sel02").trim());
+            dsc02=JSONObject.escape(rs.getString("dsc02").trim()); 
+            // 1st part           
+            if (!key01W.equals(key01)) { 
+              if (!key01W.equals("")) {
+                js5.append("]],");
+              }
+               js5.append("\"" + key01 + "\":[\"" + key01 + "\",[");
+              key01W=key01;key02W="";
+            }
+            // 2nd part
+            key02=key01W +"_" + sel02;
+            if (!key02W.equals(key02)) {
+              if (!key02W.equals("")) {
+                js5.append(",");
+              }
+              js5.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                     
+              key02W=key02;
+            }
+          }
+          // Check for data
+          if (!key01W.equals("")) {
+            js5.append("]]}");
+          } else {
+            js5.append("}");
+          }
+          rs.close();
+      } catch (Exception e) {
+        js5.append("}");
+          e.printStackTrace();
+      }
+              
+      // Result set 6 
+      rs = sp.getNextResult(); 
+      try {
+          key01W="";key02W="";
+          js6.append("\"js6Data\":{");        	    
+          while (rs.next()) {            	
+              key01=JSONObject.escape(rs.getString("key01").trim() + "_" + rs.getString("key02").trim() + "_" + rs.getString("key05").trim());
               sel02=JSONObject.escape(rs.getString("sel1").trim() + "_" + rs.getString("sel2").trim() + "_" + rs.getString("sel3").trim() + "_" + rs.getString("sel4").trim());
               if (!rs.getString("DSP4").equals("0.0000")) {       
-            	  dsc02=rs.getString("DSP1") + " X " +               
-            	        rs.getString("DSP2") + " X " +                     
-            	        rs.getString("DSP3") + " X " +               
-            	        rs.getString("DSP4");                              
-            	} else if (!rs.getString("DSP3").equals("0.0000")) {
-            	  dsc02=rs.getString("DSP1") + " X " +               
-            	        rs.getString("DSP2") + " X " +                  
-            	        rs.getString("DSP3");                        
-            	} else if (!rs.getString("DSP2").equals("0.0000")) {
-            	  dsc02=rs.getString("DSP1") + " X " +               
-            	        rs.getString("DSP2");                           
-            	} else {                                            
-            	  dsc02=rs.getString("DSP1").trim();                   
-            	}                                                   
-              // 1st part           
-              if (!key01W.equals(key01)) { 
-                if (!key01W.equals("")) {
-                  js4.append("]],");
-                }
-           	    js4.append("\"" + key01 + "\":[\"" + key01 + "\",[");
-                key01W=key01;key02W="";
-              }
-              // 2nd part
-              key02=key01W +"_" + sel02;
-              if (!key02W.equals(key02)) {
-                if (!key02W.equals("")) {
-                  js4.append(",");
-                }
-                js4.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                     
-                key02W=key02;
-              }
-            }
-            // Check for data
-            if (!key01W.equals("")) {
-            	js4.append("]]}");
-            } else {
-            	js4.append("}");
-            }
-            rs.close();
-        } catch (Exception e) {
-        	js4.append("}");
-           e.printStackTrace();
-        }  
-        
-        // Result set 5 of           
-        rs = sp.getNextResult();
-        try {
-            key01W="";
-            js5.append("\"GradeSpecs\":{");        	    
-            while (rs.next()) {            	
-              key01=JSONObject.escape(rs.getString("key01").trim());  
-              sel02=JSONObject.escape(rs.getString("sel02").trim());
-              dsc02=JSONObject.escape(rs.getString("dsc02").trim()); 
-              // 1st part           
-              if (!key01W.equals(key01)) { 
-                if (!key01W.equals("")) {
-                  js5.append("]],");
-                }
-           	    js5.append("\"" + key01 + "\":[\"" + key01 + "\",[");
-                key01W=key01;key02W="";
-              }
-              // 2nd part
-              key02=key01W + "_" + sel02;
-              if (!key02W.equals(key02)) {
-                if (!key02W.equals("")) {
-                  js5.append(",");
-                }
-                js5.append("[\"" + key02 + "\"]");                     
-                key02W=key02;
-              }
-            }
-            // Check for data
-            if (!key01W.equals("")) {
-            	js5.append("]]}");
-            } else {
-            	js5.append("}");
-            }
-            rs.close();
-        } catch (Exception e) {
-        	js5.append("}");
-            e.printStackTrace();
-        }
-        
-        // Result set 6 of   
-        rs = sp.getNextResult();
-        try {
-            key01W="";
-            js6.append("\"PartNbrs\":{");         	    
-            while (rs.next()) {            	
-              key01=JSONObject.escape(rs.getString("key01").trim());  
-              sel02=JSONObject.escape(rs.getString("sel01").trim());
-              dsc02=JSONObject.escape(rs.getString("sel02").trim()); 
+                dsc02=rs.getString("DSP1") + " X " +               
+                      rs.getString("DSP2") + " X " +                     
+                      rs.getString("DSP3") + " X " +               
+                      rs.getString("DSP4");                              
+              } else if (!rs.getString("DSP3").equals("0.0000")) {
+                dsc02=rs.getString("DSP1") + " X " +               
+                      rs.getString("DSP2") + " X " +                  
+                      rs.getString("DSP3");                        
+              } else if (!rs.getString("DSP2").equals("0.0000")) {
+                dsc02=rs.getString("DSP1") + " X " +               
+                      rs.getString("DSP2");                           
+              } else {                                            
+                dsc02=rs.getString("DSP1").trim();                   
+              }  
+
               // 1st part           
               if (!key01W.equals(key01)) { 
                 if (!key01W.equals("")) {
                   js6.append("]],");
                 }
-           	    js6.append("\"" + key01 + "\":[\"" + key01 + "\",[");
+                 js6.append("\"" + key01 + "\":[\"" + key01 + "\",[");
                 key01W=key01;key02W="";
               }
               // 2nd part
-              key02=sel02;
+              key02=key01W +"_" + sel02;
               if (!key02W.equals(key02)) {
                 if (!key02W.equals("")) {
                   js6.append(",");
                 }
-                js6.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                      
+                js6.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                     
                 key02W=key02;
               }
             }
             // Check for data
             if (!key01W.equals("")) {
-            	js6.append("]]}");
+              js6.append("]]}");
             } else {
-            	js6.append("}");
-            }             
-            rs.close();
-        } catch (Exception e) {
-        	js6.append("}");
-            e.printStackTrace();
-        }
-        
-        // Result set 7 of   
-        rs = sp.getNextResult();
-        try {
-            key01W="";
-            js7.append("\"QtyUom\":{");        	    
-            while (rs.next()) {            	
-              key01=JSONObject.escape(rs.getString("key01").trim());  
-              sel02=JSONObject.escape(rs.getString("sel01").trim());
-              dsc02=JSONObject.escape(rs.getString("sel02").trim()); 
-              // 1st part           
-              if (!key01W.equals(key01)) { 
-                if (!key01W.equals("")) {
-                  js7.append("]],");
-                }
-           	    js7.append("\"" + key01 + "\":[\"" + key01 + "\",[");
-                key01W=key01;key02W="";
-              }
-              // 2nd part
-              key02=sel02;
-              if (!key02W.equals(key02)) {
-                if (!key02W.equals("")) {
-                  js7.append(",");
-                }
-                js7.append("[\"" + key02 + "\"]");                     
-                key02W=key02;
-              }
-            }
-            // Check for data
-            if (!key01W.equals("")) {
-            	js7.append("]]}");
-            } else {
-            	js7.append("}");
+              js6.append("}");
             }
             rs.close();
         } catch (Exception e) {
-        	js7.append("}");
+         js6.append("}"); 
            e.printStackTrace();
-        }     
+        } 
         
-        // Result set 8 of   
-        rs = sp.getNextResult();
-        try {
-            key01W="";
-            js8.append("\"DailyItems\":{");         	    
-            while (rs.next()) {            	
-                key01=JSONObject.escape(rs.getString("key01").trim()); 
-                sel02=JSONObject.escape(rs.getString("sel01").trim()); 
-                dsc02=JSONObject.escape(rs.getString("sel01").trim()); 
-              // 1st part           
-              if (!key01W.equals(key01)) { 
-                if (!key01W.equals("")) {
-                  js8.append("]],");
-                }
-           	    js8.append("\"" + key01 + "\":[\"" + key01 + "\",[");
-                key01W=key01;key02W="";
+        
+      
+      // Result set 7           
+      rs = sp.getNextResult();
+      try {
+        key01W="";key02W="";
+          js7.append("\"GradeSpecs\":{");        	    
+          while (rs.next()) {            	
+            key01=JSONObject.escape(rs.getString("key01").trim());  
+            sel02=JSONObject.escape(rs.getString("sel02").trim());
+            dsc02=JSONObject.escape(rs.getString("dsc02").trim()); 
+            // 1st part           
+            if (!key01W.equals(key01)) { 
+              if (!key01W.equals("")) {
+                js7.append("]],");
               }
-              // 2nd part
-              key02=sel02;
-              if (!key02W.equals(key02)) {
-                if (!key02W.equals("")) {
-                  js8.append(",");
-                }
-                js8.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                      
-                key02W=key02;
-              }
+              js7.append("\"" + key01 + "\":[\"" + key01 + "\",[");
+              key01W=key01;key02W="";
             }
-            // Check for data
-            if (!key01W.equals("")) {
-            	js8.append("]]}");
-            } else {
-            	js8.append("}");
-            }             
-            rs.close();
-        } catch (Exception e) {
-        	js8.append("}");
-            e.printStackTrace();
-        }
-        
-        // Results used in getOEJSON (function.js)
-        return "{" + js1.toString() + "," + js2.toString() + "," + js3.toString() +  "," + js4.toString() + "," + js5.toString() + "," + js6.toString() + "," + js7.toString() + "," + js8.toString() + "}";
-    } 
-         
+            // 2nd part
+            key02=key01W +"_" + sel02;
+            if (!key02W.equals(key02)) {
+              if (!key02W.equals("")) {
+                js7.append(",");
+              }
+              js7.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                     
+              key02W=key02;
+            }
+          }
+      // Check for data
+      if (!key01W.equals("")) {
+        js7.append("]]}");
+      } else {
+           js7.append("}");
+      }
+      rs.close();
+      } catch (Exception e) {
+           js7.append("}");
+          e.printStackTrace();
+      }
+      
+      // Result set 8  
+      rs = sp.getNextResult();
+      try {
+          key01W="";
+          js8.append("\"PartNbrs\":{");         	    
+          while (rs.next()) {            	
+            key01=JSONObject.escape(rs.getString("key01").trim());  
+            sel02=JSONObject.escape(rs.getString("sel01").trim());
+            dsc02=JSONObject.escape(rs.getString("sel02").trim()); 
+            // 1st part           
+            if (!key01W.equals(key01)) { 
+              if (!key01W.equals("")) {
+                js8.append("]],");
+              }
+               js8.append("\"" + key01 + "\":[\"" + key01 + "\",[");
+              key01W=key01;key02W="";
+            }
+            // 2nd part
+            key02=sel02;
+            if (!key02W.equals(key02)) {
+              if (!key02W.equals("")) {
+                js8.append(",");
+              }
+              js8.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                      
+              key02W=key02;
+            }
+          }
+          // Check for data
+          if (!key01W.equals("")) {
+            js8.append("]]}");
+          } else {
+            js8.append("}");
+          }             
+          rs.close();
+      } catch (Exception e) {
+        js8.append("}");
+          e.printStackTrace();
+      }
+      
+      // Result set 9  
+      rs = sp.getNextResult();
+      try {
+          key01W="";
+          js9.append("\"QtyUom\":{");        	    
+          while (rs.next()) {            	
+            key01=JSONObject.escape(rs.getString("key01").trim());  
+            sel02=JSONObject.escape(rs.getString("sel01").trim());
+            dsc02=JSONObject.escape(rs.getString("sel02").trim()); 
+            // 1st part           
+            if (!key01W.equals(key01)) { 
+              if (!key01W.equals("")) {
+                js9.append("]],");
+              }
+               js9.append("\"" + key01 + "\":[\"" + key01 + "\",[");
+              key01W=key01;key02W="";
+            }
+            // 2nd part
+            key02=sel02;
+            if (!key02W.equals(key02)) {
+              if (!key02W.equals("")) {
+                js9.append(",");
+              }
+              js9.append("[\"" + key02 + "\"]");                     
+              key02W=key02;
+            }
+          }
+          // Check for data
+          if (!key01W.equals("")) {
+            js9.append("]]}");
+          } else {
+            js9.append("}");
+          }
+          rs.close();
+      } catch (Exception e) {
+        js9.append("}");	
+         e.printStackTrace();
+      }
     
+      // Result set A  
+      rs = sp.getNextResult();
+      try {
+          key01W="";
+          jsA.append("\"DailyItems\":{");         	    
+          while (rs.next()) {            	
+            key01=JSONObject.escape(rs.getString("key01").trim()); 
+            sel02=JSONObject.escape(rs.getString("sel01").trim()); 
+            dsc02=JSONObject.escape(rs.getString("sel01").trim()); 
+            // 1st part           
+            if (!key01W.equals(key01)) { 
+              if (!key01W.equals("")) {
+                jsA.append("]],");
+              }
+               jsA.append("\"" + key01 + "\":[\"" + key01 + "\",[");
+              key01W=key01;key02W="";
+            }
+            // 2nd part
+            key02=sel02;
+            if (!key02W.equals(key02)) {
+              if (!key02W.equals("")) {
+                jsA.append(",");
+              }
+              jsA.append("[\"" + key02 + "\",\"" + dsc02 + "\"]");                      
+              key02W=key02;
+            }
+          }
+          // Check for data
+          if (!key01W.equals("")) {
+            jsA.append("]]}");
+          } else {
+            jsA.append("}");
+          }             
+          rs.close();
+      } catch (Exception e) {
+        jsA.append("}");
+          e.printStackTrace();
+      }        
+      
+      // Results used in getOEJSON (function.js)        
+      return "{" + js1.toString() + "," + js2.toString() + "," + js3.toString() +  "," + js4.toString() + "," + js5.toString() + "," + js6.toString() + "," + js7.toString() + "," + js8.toString() + "," + js9.toString() + "," + jsA.toString() + "}";
+  }
     public ArrayList getShipToPickItems() {
         String tableLib = Globals.getSysProp("tblLibrary");  
         DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETSHIPADDR");
