@@ -16,9 +16,7 @@ import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 import javax.xml.transform.dom.*;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringEscapeUtils.*;
-
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
 /**
@@ -143,24 +141,18 @@ public class DB2RequestRoot {
             //DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             //org.w3c.dom.Document doc = docBuilder.newDocument();	 
             //Element parentNode = doc.createElement("DB2RecSet");
-
-            ResultSetMetaData mdata = rs.getMetaData();
-            
             json.append("[");
-
-            while (rs != null && rs.next()) { 
+            while (rs != null && rs.next()) {  
                    //Element recNode = doc.createElement("DB2Rec");
                     if (recCnt>0) json.append(",");
                     json.append("{");
                     for(int i = 1; i <= mdata.getColumnCount(); i++) {
                         colName = mdata.getColumnLabel(i);
-                         
                         //Element colNode = doc.createElement(colName); 
                         if (i>1) json.append(",");
                         json.append("\""+colName+"\":");
                         
-                        // String colValue = StringEscapeUtils.escapeEcmaScript(rs.getString(colName).trim());
-                        String colValue = rs.getString(colName).trim();
+                        String colValue = StringEscapeUtils.escapeJavaScript(rs.getString(colName).trim());
                         if (colValue == null) colValue = "";
                         json.append("\""+ JSONObject.escape(colValue) + "\"");
                         
@@ -172,14 +164,11 @@ public class DB2RequestRoot {
                 //parentNode.appendChild(recNode);
                 if (recCnt++ > 100) break;
                 
-            }    
-            
-             
+            }           
             json.append("]");
             //return getDOMAsXml(doc);
             //parentNode.setAttribute("reccnt", String.valueOf(recCnt));
             //return xmlToString(parentNode, ShowXMLDeclaration);
-
             return json.toString();
         } catch (Exception e) {
            e.printStackTrace(); 
