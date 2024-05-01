@@ -8,7 +8,6 @@ package com.paragon.metalware;
 
 import java.beans.*;
 import java.io.Serializable;
-import java.io.*;
 import javax.servlet.http.*;
 import com.paragon.db2.*;
 import java.sql.*;
@@ -73,9 +72,9 @@ public class CustomerBean extends Object implements Serializable {
             //sp.setParm("USERNAME", user.toUpperCase()); 
             //sp.setParm("PASSWORD", pass.toUpperCase()); 
             //ResultSet rs = sp.executeQuery();
-            System.out.println("We're updated");
+            System.out.println(user.toUpperCase());
             ResultSet rs = cs.executeQuery();
-                if (rs.next()) { 
+                if (rs.next()) {   
                     setEccid(rs.getString("ECCID").trim());
                     setEccpwd(rs.getString("ECCPWD").trim());                                          
                     setEccar_num(new Integer(rs.getInt("ECCAR#")).intValue());
@@ -92,7 +91,7 @@ public class CustomerBean extends Object implements Serializable {
                     this.VendorNo = rs.getString("ECCVND#").trim();
                     setEccans(rs.getString("ECCANS").trim());
                     setEcques(rs.getString("ECQUES").trim());
-                    getCustFlags();                  
+                    getCustFlags();
                     this.CustName = rs.getString("CUSTNAME").trim();
                     this.LoggedOnAsGuest = false;
                     if (session != null || (session == null && flag == "1")) {
@@ -106,11 +105,11 @@ public class CustomerBean extends Object implements Serializable {
                 } 
              rs.close();
              
-        }  catch (Exception ex) {
+        }  catch (SQLException ex) {
             if (session != null) session.setAttribute( "ERROR","Authentication Error: "+ex.toString());
             ex.printStackTrace();
         } 
-        db2con.close(); 
+        db2con.close();
         return loginok;
     }
     
@@ -139,19 +138,15 @@ public class CustomerBean extends Object implements Serializable {
     
     void getCustFlags() {
         int custno = getEccar_num();
-        
         String userid = getUserID();
         if (custno == 0) return;
         db2con = new DB2jdbcCon(Globals.getSysProp("localString"), Globals.getSysProp("username"), Globals.getSysProp("password"));
         try {   
             DB2storedproc sp = new DB2storedproc(db2con.getCon(), Globals.getSysProp("spLibrary") + ".GETCUSTFLAGS");
-            
             sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary")); 
             sp.setParm("CUSTNO", custno); 
-            sp.setParm("USERID", userid);
-
+            sp.setParm("USERID", userid); 
             ResultSet rs = sp.executeQuery();
-            
             CustFlags cf = null;
             String FlagID = "";
             if (!eccans.equals("") && !eccpwd.toUpperCase().equals("PASSWORD")){
@@ -163,12 +158,11 @@ public class CustomerBean extends Object implements Serializable {
                     }    
                 }
             }
-
+            
             sp.clearParms();
             sp.setParm("LIBNAME", Globals.getSysProp("tblLibrary")); 
             sp.setParm("CUSTNO", custno); 
             sp.setParm("USERID", userid); 
-
             rs = sp.executeQuery();
             while (rs.next()) {
                 FlagID = rs.getString("FLGFLD").trim();
@@ -190,8 +184,9 @@ public class CustomerBean extends Object implements Serializable {
                         }
                     }
                 }    
-            }          
-        }  catch (Exception ex) {
+            } 
+            rs.close();           
+        }  catch (SQLException ex) {
             ex.printStackTrace();
         } 
         db2con.close();     
@@ -305,11 +300,9 @@ public class CustomerBean extends Object implements Serializable {
     
     //Customer Number
     public void setEccar_num(int value) {
-            
         eccar_num = value;
     }
      public int getEccar_num  () {
-     
         return eccar_num ;
     }
      public String getCustomerNo() {
